@@ -59,6 +59,14 @@ $('document').ready(function () {
     $divMeta.append($linkItem).append($itemDate);
   }
 
+  function handlebarsRender(value) {
+    var source = $('#entry-template').html();
+    var template = Handlebars.compile(source);
+    var context = value;
+    var html = template(context);
+    $('.social-media__list').append(html);
+  }
+
   var publicationsUrl = 'http://macmillan.zindex.host/wp-json/wp/v2/publications/';
   var postsUrl = 'http://macmillan.zindex.host/wp-json/wp/v2/posts/';
   var presentationsUrl = 'http://macmillan.zindex.host/wp-json/wp/v2/presentations/';
@@ -108,12 +116,12 @@ $('document').ready(function () {
           result,
           item.type];
 
-        // console.log(finalResult);
 
-        render(finalResult);
-      })
-      .then(function () {
-        $container.masonry({ itemSelector: '.social-media__item' });
+        handlebarsRender(finalResult);
+        // render(finalResult);
+      // })
+      // .then(function () {
+        // $container.masonry({ itemSelector: '.social-media__item' });
       });
     });
   });

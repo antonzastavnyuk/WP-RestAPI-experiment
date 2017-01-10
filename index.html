@@ -8,12 +8,32 @@
   <body>
     <section class="social-media">
       <div class="wrapper">
+        <ul class="social-media__list js-social-media-container js-masonry" data-masonry="{ itemSelector: .social-media__item;}" style="position: relative; height: 2813px;">
 
+        </ul>
       </div>
       <div class="clearfix"></div>
     </section>
   </body>
+  <script id="entry-template" type="text/x-handlebars-template">
+
+      <li class="social-media__item">
+        <div class="social-media__item-content  social-media__item-content--tweet">
+          <div class="social-media__item-description">
+            <div class="social-media__item-image-container" style="height:339px">
+              <img width="339" height="339" src="http://macmillan.zindex.host/wp-content/uploads/C0ghWFsUoAA7LDO-339x339.jpg" class="social-media__item-thumbnail wp-post-image" alt="" srcset="http://macmillan.zindex.host/wp-content/uploads/C0ghWFsUoAA7LDO-339x339.jpg 339w, http://macmillan.zindex.host/wp-content/uploads/C0ghWFsUoAA7LDO-150x150.jpg 150w, http://macmillan.zindex.host/wp-content/uploads/C0ghWFsUoAA7LDO-125x125.jpg 125w, http://macmillan.zindex.host/wp-content/uploads/C0ghWFsUoAA7LDO-255x255.jpg 255w" sizes="(max-width: 339px) 100vw, 339px"></div>
+              <p><a href="https://t.co/QkM6FdFWQR" target="_blank">https://t.co/QkM6FdFWQR</a></p>
+            <span class="social-media__item-autor"></span>
+          </div>
+          <div class="social-media__item-meta">
+          <a class="social-media__item-link" href="https://twitter.com/MacMillan_Lab" target="_blank"><svg width="19px" height="16px"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-twitter--tr"></use></svg> @MacMillan_Lab</a>    <span class="social-media__item-date">12.25.16</span>
+          </div>
+        </div>
+      </li>
+
+  </script>
   <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
   <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.6/handlebars.min.js"></script>
   <script src="/build/js/bundle.js"></script>
 </html>
