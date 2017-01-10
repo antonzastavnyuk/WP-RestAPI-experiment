@@ -8,7 +8,6 @@
   "dependencies": {
     "autoprefixer": "^6.3.6",
     "babel-eslint": "^6.1.2",
-    "bower": "^1.7.9",
     "browser-sync": "^2.12.10",
     "cssnano": "^3.6.2",
     "eslint": "^3.5.0",
