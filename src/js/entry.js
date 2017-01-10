@@ -111,6 +111,9 @@ $('document').ready(function () {
         // console.log(finalResult);
 
         render(finalResult);
+      })
+      .then(function () {
+        $container.masonry({ itemSelector: '.social-media__item' });
       });
     });
   });
