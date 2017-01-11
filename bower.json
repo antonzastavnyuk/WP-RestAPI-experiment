@@ -1,0 +1,10 @@
+{
+  "name": "restapi",
+  "description": "Get frontend files",
+  "dependencies": {
+    "jquery": "latest",
+    "masonry": "^4.1.1",
+    "imagesloaded": "latest",
+    "handlebars" : "^4.0.5"
+  }
+}
