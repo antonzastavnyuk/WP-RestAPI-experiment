@@ -1,10 +1,6 @@
 $('document').ready(function () {
-  var $container;
-  $('.wrapper').append('<ul />');
-  $container = $('ul').addClass('social-media__list');
-
   function getData(url) {
-    return new Promise(function (resolve, reject) {
+    return new Promise(function (resolve) {
       jQuery.ajax({
         url: url,
         type: 'get',
@@ -14,7 +10,8 @@ $('document').ready(function () {
         },
         statusCode: {
           403: function () {
-            reject('403');
+            resolve('403');
+            // reject('403');
           }
         }
       });
@@ -22,49 +19,26 @@ $('document').ready(function () {
     });
   }
 
-  function render(value) {
-    var title = value[1];
-    var $li = $('<li />').attr({ class: 'social-media__item' });
-    var $divContent = $('<div />').attr({ class: 'social-media__item-content' });
-    var $divDescription = $('<div />').attr({ class: 'social-media__item-description' });
-    var $divMeta = $('<div />').attr({ class: 'social-media__item-meta' });
-    var $divImageContainer = $('<div />').attr({ class: 'social-media__item-image-container', style: 'height: 89px;' });
-    var $divTitleContainer = $('<div />').attr({ class: 'social-media__item-title-container' });
-    var $autorsMeta = $('<span />').attr({ class: 'social-media__item-author' }).html(value[2]);
-    var $linkItem = $('<a />').attr({ class: 'social-media__item-link', href: value[3], target: '_blank' }).html('view');
-    var date = new Date(value[0]);
-    var year = date.getFullYear();
-    var month = date.getMonth() + 1;
-    var day = date.getDay();
-    var $itemDate = $('<span />').attr({ class: 'social-media__item-date' }).html(year + '.' + day + '.' + month);
-    $container.append($li);
-    $li.append($divContent);
-    $divContent.append($divDescription).append($divMeta);
-    if (value[5] === 'publications') {
-      // alert(value[5]);
-      $divContent.addClass('social-media__item-content--publications');
-    } else if (value[5] === 'presentations') {
-      $divContent.addClass('social-media__item-content--tweet');
-    } else if (value[5] === 'post') {
-      $divContent.addClass('social-media__item-content--post');
-    }
-    if (value[4] !== '403') {
-      var img = $('<img />', { src: value[4], style: 'height: 100%;' });
-      $divDescription.append($divImageContainer).append($divTitleContainer);
-      $divImageContainer.append(img);
-    } else {
-      $divDescription.append($divTitleContainer);
-    }
-    $divTitleContainer.append('<p>' + title + '</p>').append($autorsMeta);
-    $divMeta.append($linkItem).append($itemDate);
-  }
-
   function handlebarsRender(value) {
     var source = $('#entry-template').html();
     var template = Handlebars.compile(source);
-    var context = value;
-    var html = template(context);
-    $('.social-media__list').append(html);
+
+    Handlebars.registerHelper('postTypeClass', function (type) {
+      if (type === 'presentations') {
+        type = 'tweet';
+      }
+      return ' social-media__item-content--' + type;
+    });
+
+    Handlebars.registerHelper('dateFormat', function (dateIn) {
+      var date = new Date(dateIn);
+      var year = String(date.getFullYear());
+      var month = date.getMonth();
+      var day = date.getDate();
+      return month + '.' + day + '.' + year.substr((year.length - 2), 2);
+    });
+
+    $('.wrapper').append(template(value));
   }
 
   var publicationsUrl = 'http://macmillan.zindex.host/wp-json/wp/v2/publications/';
@@ -76,6 +50,7 @@ $('document').ready(function () {
   var postsResult = getData(postsUrl);
 
   Promise.all([publicationsResult, presentationsResult, postsResult]).then(function (allResults) {
+    // console.log(allResults);
     var allResultsConcat = allResults.reduce(function (a, b) {
       return a.concat(b);
     });
@@ -84,11 +59,15 @@ $('document').ready(function () {
       return (new Date(b.date)).getTime() - (new Date(a.date)).getTime();
     });
 
-    allResultsConcat.map(function (item) {
+    var readyResults = {};
+    readyResults.items = [];
+    var image = [];
+
+    allResultsConcat.forEach(function (item) {
       var author;
       var pdf;
-      var finalResult;
       var imageHref = item._links['wp:featuredmedia'][0].href;
+
 
       if (item.type === 'publications') {
         author = item.acf.pb_authors_meta;
@@ -101,28 +80,26 @@ $('document').ready(function () {
         pdf = '';
       }
 
-      getData(imageHref)
-      .then(function (data) {
-        return data.source_url;
-      }, function (data) {
-        return data;
-      })
-      .then(function (result) {
-        finalResult = [
-          item.date,
-          item.title.rendered,
-          author,
-          pdf,
-          result,
-          item.type];
+      readyResults.items[readyResults.items.length] = {
+        date: item.date,
+        title: item.title.rendered,
+        author: author,
+        documentLink: pdf,
+        itemType: item.type
+      };
 
+      image[image.length] = getData(imageHref);
+    });
 
-        handlebarsRender(finalResult);
-        // render(finalResult);
-      // })
-      // .then(function () {
-        // $container.masonry({ itemSelector: '.social-media__item' });
+    Promise.all(image).then(function (img) {
+      readyResults.items.forEach(function (item, i) {
+        if (img[i] !== '403') {
+          readyResults.items[i].imageHref = img[i];
+        } else {
+          readyResults.items[i].imageHref = false;
+        }
       });
+      handlebarsRender(readyResults);
     });
   });
 });
