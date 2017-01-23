@@ -63,7 +63,7 @@
     // float: left;
   }
 
-  &__item-content--tweet {
+  &__item-content--presentations {
     border-bottom: 4px solid #3b97c8;
 
     .social-media__item-link {
@@ -107,7 +107,6 @@
 
     p {
       color: #252525;
-      font-family: Metropolis;
       font-size: 1rem;
       font-weight: 400;
       line-height: 1.38;
@@ -124,7 +123,6 @@
 
   &__item-autor {
     color: #959595;
-    font-family: Aleo;
     font-size: 0.875rem;
     font-weight: 400;
     line-height: 1.71;
@@ -152,4 +150,18 @@
     padding-top: 52px;
     padding-bottom: 69px;
   }
+}
+
+.clearfix::before,
+.clearfix::after {
+  content: " ";
+  display: table;
+}
+
+.clearfix::after {
+  clear: both;
+}
+
+.clearfix {
+  *zoom: 1;
 }
