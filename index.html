@@ -23,14 +23,16 @@
             <div class="social-media__item-description">
               {{#if imageHref}}
                 <div class="social-media__item-image-container" style="height:339px">
-                  <img src="{{imageHref.source_url}}" alt="">
+                  <img src="{{imageHref}}" alt="">
                 </div>
               {{/if}}
                 <p>{{title}}</p>
-              <span class="social-media__item-autor"></span>
+              <span class="social-media__item-autor">{{author}}</span>
             </div>
             <div class="social-media__item-meta">
-            <a class="social-media__item-link" href="https://twitter.com/MacMillan_Lab" target="_blank"><svg width="19px" height="16px"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-twitter--tr"></use></svg> @MacMillan_Lab</a>    <span class="social-media__item-date">{{dateFormat date}}</span>
+            <a class="social-media__item-link" href="https://twitter.com/MacMillan_Lab" target="_blank">
+              <svg width="19px" height="16px"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-twitter--tr"></use></svg> @MacMillan_Lab</a>
+              <span class="social-media__item-date">{{dateFormat date}}</span>
             </div>
           </div>
         </li>

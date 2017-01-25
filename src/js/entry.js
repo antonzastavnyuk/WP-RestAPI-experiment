@@ -46,7 +46,6 @@ var presentationsResult = getData(presentationsUrl);
 var postsResult = getData(postsUrl);
 
 Promise.all([publicationsResult, presentationsResult, postsResult]).then(function (allResults) {
-  // console.log(allResults);
   var allResultsConcat = allResults.reduce(function (a, b) {
     return a.concat(b);
   });
@@ -63,7 +62,6 @@ Promise.all([publicationsResult, presentationsResult, postsResult]).then(functio
     var author;
     var pdf;
     var imageHref = item._links['wp:featuredmedia'][0].href;
-
 
     if (item.type === 'publications') {
       author = item.acf.pb_authors_meta;
@@ -84,18 +82,20 @@ Promise.all([publicationsResult, presentationsResult, postsResult]).then(functio
       itemType: item.type
     });
 
-    image[image.length] = getData(imageHref);
+    image.push(getData(imageHref));
   });
 
-  Promise.all(image).then(function (img) {
+  Promise.all(image)
+  .then(function (img) {
     readyResults.items.forEach(function (item, i) {
       if (img[i] !== '403') {
-        readyResults.items[i].imageHref = img[i];
+        readyResults.items[i].imageHref = img[i].source_url;
       } else {
         readyResults.items[i].imageHref = false;
       }
-      $('.loader').toggleClass('loaded');
     });
+
+    $('.loader').toggleClass('loaded');
     handlebarsRender(readyResults);
   });
 });
